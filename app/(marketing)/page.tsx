@@ -17,11 +17,11 @@ export default function Home() {
       <div className="relative mb-8 h-[200px] w-[240px] lg:h-[424px] lg:w-[424px]">
         <Image src="/hero.svg" alt="Hero" width={400} height={400} />
       </div>
-      <div className="flex flex-col items-center space-y-8">
+      <div className="flex w-full max-w-[340px] flex-col items-center gap-y-3">
         <h1 className="max-w-[480px] text-center text-xl font-bold text-neutral-600 lg:text-3xl">
           Learn, practice, and master new languages with Le Lingo.
         </h1>
-        <div>
+        <div className="flex w-full max-w-[424px] flex-col items-center gap-y-3">
           <ClerkLoading>
             <Loader className="text-mited-foreground h-5 w-5 animate-spin" />
           </ClerkLoading>
