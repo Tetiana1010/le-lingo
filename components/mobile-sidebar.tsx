@@ -3,7 +3,6 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
 import { Sidebar } from "./sidebar";
 
-
 export const MobileSidebar = () => {
   return (
     <Sheet>
