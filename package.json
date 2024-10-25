@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.7.5",
+    "@electric-sql/pglite": "^0.2.12",
     "@neondatabase/serverless": "^0.10.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.0",
