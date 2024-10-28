@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { InfinityIcon } from "lucide-react";
-import { headers } from "next/headers";
 
 type Props = {
   activeCourse: {
