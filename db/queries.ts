@@ -25,3 +25,9 @@ export const getCourses = async () => {
   const data = await db.select().from(courses);
   return data;
 };
+
+export const getCourseById = cache(async (courseId: number) => {
+  const data = await db.select().from(courses).where(eq(courses.id, courseId));
+
+  return data;
+});
