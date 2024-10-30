@@ -19,8 +19,9 @@ const LearnPage = async () => {
       <FeedWrapper>
         <UserProgress
           activeCourse={{
-            title: "Spanish",
-            imageSrc: "/es.svg",
+            id: userProgress.activeCourseId,
+            title: userProgress.courseTitle,
+            imageSrc: userProgress.courseImageSrc,
           }}
           hearts={5}
           points={100}
@@ -28,7 +29,7 @@ const LearnPage = async () => {
         />
       </FeedWrapper>
       <StickyWrapper>
-        <Header title="Spanish" />
+        <Header title={userProgress.courseTitle} />
       </StickyWrapper>
     </div>
   );

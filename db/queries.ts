@@ -14,8 +14,11 @@ export const getUserProgress = cache(async () => {
   const data = await db
     .select({
       activeCourseId: userProgress.activeCourseId,
+      courseTitle: courses.title,
+      courseImageSrc: courses.imageSrc,
     })
     .from(userProgress)
+    .innerJoin(courses, eq(userProgress.activeCourseId, courses.id))
     .where(eq(userProgress.userId, userId));
 
   return data[0] || null;
@@ -28,6 +31,5 @@ export const getCourses = async () => {
 
 export const getCourseById = cache(async (courseId: number) => {
   const data = await db.select().from(courses).where(eq(courses.id, courseId));
-
   return data;
 });

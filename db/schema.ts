@@ -11,11 +11,11 @@ export const coursesRelations = relations(courses, ({ many }) => ({
   userProgress: many(userProgress),
 }));
 
-export const userProgress = pgTable("user_progres", {
+export const userProgress = pgTable("user_progress", {
   userId: text("user_id").primaryKey(),
   userName: text("user_name").notNull().default("User"),
   userImageSrc: text("user_image_src").notNull().default("/mascot.svg"),
-  activeCourseId: integer("active_course_is").references(() => courses.id, {
+  activeCourseId: integer("active_course_id").references(() => courses.id, {
     onDelete: "cascade",
   }),
   hearts: integer("hearts").notNull().default(5),
@@ -28,6 +28,3 @@ export const userProgressRelations = relations(userProgress, ({ one }) => ({
     references: [courses.id],
   }),
 }));
-
-export type InsertCourses = typeof courses.$inferInsert;
-export type SelectCourses = typeof courses.$inferSelect;
