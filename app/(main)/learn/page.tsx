@@ -19,7 +19,7 @@ const LearnPage = async () => {
       <FeedWrapper>
         <UserProgress
           activeCourse={{
-            id: userProgress.activeCourseId,
+            id: userProgress?.activeCourseId,
             title: userProgress.courseTitle,
             imageSrc: userProgress.courseImageSrc,
           }}
@@ -29,7 +29,7 @@ const LearnPage = async () => {
         />
       </FeedWrapper>
       <StickyWrapper>
-        <Header title={userProgress.courseTitle} />
+        <Header title={userProgress?.courseTitle} />
       </StickyWrapper>
     </div>
   );
