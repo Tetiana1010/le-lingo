@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { db } from "./drizzle";
-import { courses, userProgress } from "./schema";
+import { courses, userProgress, units } from "./schema";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
@@ -24,12 +24,30 @@ export const getUserProgress = cache(async () => {
   return data[0] || null;
 });
 
-export const getCourses = async () => {
+export const getCourses = cache(async () => {
   const data = await db.select().from(courses);
   return data;
-};
+});
 
 export const getCourseById = cache(async (courseId: number) => {
   const data = await db.select().from(courses).where(eq(courses.id, courseId));
   return data;
+});
+
+
+export const getUnits = cache(async() => {
+  const userProgress = await getUserProgress();
+
+  if(!userProgress?.activeCourseId){
+    return [];
+  }
+
+  const data = await db.select()
+  .from(units)
+  .where(eq(units.courseId, userProgress.activeCourseId))
+  // .with({
+  //   lessons: true,
+  //   challenges: true,
+  // });
+
 });
