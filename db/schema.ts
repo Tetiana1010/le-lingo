@@ -145,6 +145,18 @@ export const userProgressRelations = relations(userProgress, ({ one }) => ({
 
 const schema = {
   units,
+  courses,
+  lessons,
+  challenges,
+  userProgress,
+  unitsRelations,
+  challengeOptions,
+  challengeProgress,
+  lessonsRelations,
+  challengesRelations,
+  challengesOptionsRelations,
+  challengeProgressRelations,
+  userProgressRelations,
 };
 
 export default schema;

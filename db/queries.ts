@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { db } from "./drizzle";
-import { courses, userProgress, units, lessons } from "./schema";
+import { courses, userProgress, units } from "./schema";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
@@ -11,26 +11,39 @@ export const getUserProgress = cache(async () => {
     return null;
   }
 
-  const data = await db
-    .select({
-      activeCourseId: userProgress.activeCourseId,
-      courseTitle: courses.title,
-      courseImageSrc: courses.imageSrc,
-    })
-    .from(userProgress)
-    .innerJoin(courses, eq(userProgress.activeCourseId, courses.id))
-    .where(eq(userProgress.userId, userId));
+  // const data = await db
+  //   .select({
+  //     activeCourseId: userProgress.activeCourseId,
+  //     courseTitle: courses.title,
+  //     courseImageSrc: courses.imageSrc,
+  //   })
+  //   .from(userProgress)
+  //   .innerJoin(courses, eq(userProgress.activeCourseId, courses.id))
+  //   .where(eq(userProgress.userId, userId));
 
-  return data[0] || null;
+  // return data[0] || null;
+
+  const data = await db.query.userProgress.findFirst({
+    where: eq(userProgress.userId, userId),
+    with: {
+      activeCourse: true
+    }
+  })
+
+  return data;
 });
 
 export const getCourses = cache(async () => {
-  const data = await db.select().from(courses);
+  // const data = await db.select().from(courses);
+  const data = await db.query.courses.findMany();
   return data;
 });
 
 export const getCourseById = cache(async (courseId: number) => {
-  const data = await db.select().from(courses).where(eq(courses.id, courseId));
+  // const data = await db.select().from(courses).where(eq(courses.id, courseId));
+  const data = await db.query.courses.findFirst({
+    where: eq(courses.id, courseId)
+  });
   return data;
 });
 
@@ -66,10 +79,10 @@ export const getUnits = cache(async () => {
         );
       });
 
-      return { ...lesson, completed, allCompletedChallenges };
+      return { ...lesson, completed: allCompletedChallenges };
     });
 
-    return {...unit, lessons, lessonsWithCompletedStatus}
+    return {...unit, lessons: lessonsWithCompletedStatus}
   });
 
   return normalizedData;

@@ -19,18 +19,14 @@ const LearnPage = async () => {
     <div className="flex gap-[48px] px-6">
       <FeedWrapper>
         <UserProgress
-          activeCourse={{
-            id: userProgress?.activeCourseId,
-            title: userProgress.courseTitle,
-            imageSrc: userProgress.courseImageSrc,
-          }}
-          hearts={5}
-          points={100}
+          activeCourse={userProgress.activeCourse}
+          hearts={userProgress.hearts}
+          points={userProgress.points}
           hasActiveSubscription={false}
         />
       </FeedWrapper>
       <StickyWrapper>
-        <Header title={userProgress?.courseTitle} />
+        <Header title={userProgress.activeCourse.title} />
         {
           units.map((unit) => (
             <div key={unit.id} className="mb-10">
