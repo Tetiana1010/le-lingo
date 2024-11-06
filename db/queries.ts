@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { db } from "./drizzle";
-import { courses, userProgress, units } from "./schema";
+import { courses, userProgress, units, challengeProgress } from "./schema";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
@@ -26,9 +26,9 @@ export const getUserProgress = cache(async () => {
   const data = await db.query.userProgress.findFirst({
     where: eq(userProgress.userId, userId),
     with: {
-      activeCourse: true
-    }
-  })
+      activeCourse: true,
+    },
+  });
 
   return data;
 });
@@ -42,15 +42,17 @@ export const getCourses = cache(async () => {
 export const getCourseById = cache(async (courseId: number) => {
   // const data = await db.select().from(courses).where(eq(courses.id, courseId));
   const data = await db.query.courses.findFirst({
-    where: eq(courses.id, courseId)
+    where: eq(courses.id, courseId),
   });
   return data;
 });
 
 export const getUnits = cache(async () => {
+  const { userId } = await auth();
+
   const userProgress = await getUserProgress();
 
-  if (!userProgress?.activeCourseId) {
+  if (!userId || !userProgress?.activeCourseId) {
     return [];
   }
 
@@ -61,7 +63,9 @@ export const getUnits = cache(async () => {
         with: {
           challenges: {
             with: {
-              challengeProgress: true,
+              challengeProgress: {
+                where: eq(challengeProgress.userId, userId),
+              },
             },
           },
         },
@@ -82,9 +86,8 @@ export const getUnits = cache(async () => {
       return { ...lesson, completed: allCompletedChallenges };
     });
 
-    return {...unit, lessons: lessonsWithCompletedStatus}
+    return { ...unit, lessons: lessonsWithCompletedStatus };
   });
 
   return normalizedData;
-  
 });
