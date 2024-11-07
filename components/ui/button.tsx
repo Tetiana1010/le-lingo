@@ -28,13 +28,15 @@ const buttonVariants = cva(
           "bg-transparent text-slate-500 border-transparent border-2 border-t-transparent hover:bg-slate-100 transition-none",
         sidebarOutline:
           "bg-sky-500/15 text-sky-500 border-sky-300 border-2  hover:bg-sky-500/20 transition-none",
+        locked:
+          "bg-neutral-200 text-primary-foregroun hover:bg-neutral-200/90 border-neutral-400 border-b-4 active:border-b-0",
       },
       size: {
         default: "h-11 px-4 py-2",
         sm: "h-9 px-3",
         lg: "h-12 px-8",
         icon: "h-10 w-10",
-        rounder: "rounded-full",
+        rounded: "rounded-full",
       },
     },
     defaultVariants: {
