@@ -20,15 +20,7 @@ const LearnPage = async () => {
   }
 
   return (
-    <div className="flex gap-[48px] px-6">
-      <FeedWrapper>
-        <UserProgress
-          activeCourse={userProgress.activeCourse}
-          hearts={userProgress.hearts}
-          points={userProgress.points}
-          hasActiveSubscription={false}
-        />
-      </FeedWrapper>
+    <div className="flex flex-row-reverse gap-[48px] px-6">
       <StickyWrapper>
         <Header title={userProgress.activeCourse.title} />
         {units.map((unit) => (
@@ -45,6 +37,14 @@ const LearnPage = async () => {
           </div>
         ))}
       </StickyWrapper>
+      <FeedWrapper>
+        <UserProgress
+          activeCourse={userProgress.activeCourse}
+          hearts={userProgress.hearts}
+          points={userProgress.points}
+          hasActiveSubscription={false}
+        />
+      </FeedWrapper>
     </div>
   );
 };
