@@ -17,18 +17,19 @@ const LearnPage = async () => {
   const lessonPercentageData = getLessonPercentage();
   const unitsData = getUnits();
 
-  const [userProgress, units, courseProgress, lessonPercentage] = await Promise.all([
-    userProgressData,
-    unitsData,
-    courseProgressData,
-    lessonPercentageData,
-  ]);
+  const [userProgress, units, courseProgress, lessonPercentage] =
+    await Promise.all([
+      userProgressData,
+      unitsData,
+      courseProgressData,
+      lessonPercentageData,
+    ]);
 
   if (!userProgress || !userProgress.activeCourseId) {
     redirect("/courses");
   }
 
-  if(!courseProgress){
+  if (!courseProgress) {
     redirect("/courses");
   }
 
