@@ -3,6 +3,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import localFont from "next/font/local";
+import { ExitModal } from "@/components/modals/exit-modal";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -33,6 +34,7 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <Toaster />
+          <ExitModal />
           {children}
         </body>
       </html>
