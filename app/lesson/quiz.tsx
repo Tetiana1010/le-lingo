@@ -3,6 +3,8 @@
 import { challengeOptions, challenges } from "@/db/schema";
 import { useState } from "react";
 import { Header } from "./header";
+import { QuestionBubble } from "./question-bubble";
+import { Challenge } from "./challenge";
 
 type Props = {
   initialLessonId: number;
@@ -34,6 +36,7 @@ export const Quiz = ({
   });
 
   const challenge = challenges[activeIndex];
+  const options = challenge?.challengeOptions ?? [];
 
   const title =
     challenge.type === "ASSIST"
@@ -51,9 +54,21 @@ export const Quiz = ({
         <div className="flex h-full items-center justify-center">
           <div className="flex w-full flex-col gap-y-12 px-6 lg:min-h-[350] lg:w-[600px] lg:px-6">
             <h1 className="text-center text-lg font-bold text-neutral-700 lg:text-start lg:text-3xl">
-              Which of there is an apple?
+              {title}
             </h1>
-            <div>{title}</div>
+            <div>
+              {challenge.type === "ASSIST" && (
+                <QuestionBubble question={challenge.question} />
+              )}
+              <Challenge
+                options={options}
+                onSelect={() => {}}
+                status={"none"}
+                selectOption={undefined}
+                disabled={false}
+                type={challenge.type}
+              />
+            </div>
           </div>
         </div>
       </div>
