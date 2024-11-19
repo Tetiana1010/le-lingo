@@ -11,7 +11,7 @@ type Props = {
   shortcut: string;
   selected?: boolean;
   onClick: () => void;
-  status?: "correct" | "wrong" | "none";
+  status?: "correct" | "wrong" | "none" | "completed";
   audioSrc: string | null;
   disabled?: boolean;
   type: (typeof challenges.$inferSelect)["type"];
