@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@/db/drizzle";
 import { and, eq } from "drizzle-orm";
 import { challenges, challengeProgress, userProgress } from "@/db/schema";
+import { revalidatePath } from "next/cache";
 
 export const upsertChallengeProgress = async (challengeId: number) => {
   const { userId } = await auth();
@@ -52,9 +53,38 @@ export const upsertChallengeProgress = async (challengeId: number) => {
       })
       .where(eq(challengeProgress.id, existingChallengeProgress.id));
 
-    await db.update(userProgress).set({
-      hearts: Math.min(currentUserProgress.hearts + 1, 5),
-      points: currentUserProgress.points + 10
-    }).where(eq(userProgress.userId, userId))
+    await db
+      .update(userProgress)
+      .set({
+        hearts: Math.min(currentUserProgress.hearts + 1, 5),
+        points: currentUserProgress.points + 10,
+      })
+      .where(eq(userProgress.userId, userId));
+
+    revalidatePath("/learn");
+    revalidatePath("/lesson");
+    revalidatePath("/quests");
+    revalidatePath("/leaderbord");
+    revalidatePath(`/lesson/${lessonId}`);
+    return;
   }
+
+  await db.insert(challengeProgress).values({
+    challengeId,
+    userId,
+    completed: true,
+  });
+
+  await db
+    .update(userProgress)
+    .set({
+      points: currentUserProgress.points + 10,
+    })
+    .where(eq(userProgress.userId, userId));
+
+  revalidatePath("/learn");
+  revalidatePath("/lesson");
+  revalidatePath("/quests");
+  revalidatePath("/leaderbord");
+  revalidatePath(`/lesson/${lessonId}`);
 };
