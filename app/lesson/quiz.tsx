@@ -1,14 +1,15 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useAudio } from "react-use";
 import { challengeOptions, challenges } from "@/db/schema";
 import { QuestionBubble } from "./question-bubble";
 import { Challenge } from "./challenge";
 import { Header } from "./header";
 import { Footer } from "./footer";
-import { upsertChallengeProgress } from "@/actions/challenge-progress";
 import { toast } from "sonner";
 import { reduceHearts } from "@/actions/user-progress";
+import { upsertChallengeProgress } from "@/actions/challenge-progress";
 
 type Props = {
   initialLessonId: number;
@@ -28,6 +29,14 @@ export const Quiz = ({
   initialPercentage,
   userSubscription,
 }: Props) => {
+  const [correctAudio, _c, correctControls] = useAudio({
+    src: "/correct.wav",
+  });
+
+  const [incorrectAudio, _i, incorrectControls] = useAudio({
+    src: "/incorrect.wav",
+  });
+
   const [pending, startTransition] = useTransition();
 
   const [hearts, setHearts] = useState(initialHearts);
@@ -69,6 +78,13 @@ export const Quiz = ({
       return;
     }
 
+    if (status === "wrong") {
+      onNext();
+      setStatus("none");
+      setSelectedOption(undefined);
+      return;
+    }
+
     const correctOption = options.find((option) => option.correct);
 
     if (!correctOption) {
@@ -80,10 +96,11 @@ export const Quiz = ({
         upsertChallengeProgress(challenge.id)
           .then((response) => {
             if (response?.error === "heart") {
-              console.log("missing hearts");
+              console.error("missing hearts");
               return;
             }
 
+            correctControls.play();
             setStatus("correct");
             setPercentage((prev) => prev + 100 / challenges.length);
 
@@ -102,6 +119,7 @@ export const Quiz = ({
               return;
             }
 
+            incorrectControls.play();
             setStatus("wrong");
 
             if (!response?.error) {
@@ -120,6 +138,8 @@ export const Quiz = ({
 
   return (
     <>
+      {incorrectAudio}
+      {correctAudio}
       <Header
         hearts={hearts}
         percentage={percentage}
