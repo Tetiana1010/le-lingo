@@ -6,14 +6,14 @@ import { useAudio, useKey } from "react-use";
 
 type Props = {
   id: number;
-  text: string;
   imageSrc: string | null;
+  audioSrc: string | null;
+  text: string;
   shortcut: string;
   selected?: boolean;
   onClick: () => void;
-  status?: "correct" | "wrong" | "none" | "completed";
-  audioSrc: string | null;
   disabled?: boolean;
+  status?: "correct" | "wrong" | "none";
   type: (typeof challenges.$inferSelect)["type"];
 };
 

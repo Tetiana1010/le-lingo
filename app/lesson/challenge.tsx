@@ -5,8 +5,8 @@ import { Card } from "./card";
 type Props = {
   options: (typeof challengeOptions.$inferSelect)[];
   onSelect: (id: number) => void;
-  status: "correct" | "wrong" | "none" | "completed";
-  selectOption?: number;
+  status: "correct" | "wrong" | "none";
+  selectedOption?: number;
   disabled?: boolean;
   type: (typeof challenges.$inferSelect)["type"];
 };
@@ -15,7 +15,7 @@ export const Challenge = ({
   options,
   onSelect,
   status,
-  selectOption,
+  selectedOption,
   disabled,
   type,
 }: Props) => {
@@ -29,21 +29,19 @@ export const Challenge = ({
       )}
     >
       {options.map((option, i) => (
-        <div>
-          <Card
-            key={option.id}
-            id={option.id}
-            text={option.text}
-            imageSrc={option.imageSrc}
-            shortcut={`${i + 1}`}
-            selected={selectOption === option.id}
-            onClick={() => onSelect(option.id)}
-            status={status}
-            audioSrc={option.audioSrc}
-            disabled={disabled}
-            type={type}
-          />
-        </div>
+        <Card
+          key={option.id}
+          id={option.id}
+          text={option.text}
+          imageSrc={option.imageSrc}
+          shortcut={`${i + 1}`}
+          selected={selectedOption === option.id}
+          onClick={() => onSelect(option.id)}
+          status={status}
+          audioSrc={option.audioSrc}
+          disabled={disabled}
+          type={type}
+        />
       ))}
     </div>
   );

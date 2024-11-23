@@ -2,14 +2,18 @@
 
 import { useState, useTransition } from "react";
 import { useAudio } from "react-use";
+
 import { challengeOptions, challenges } from "@/db/schema";
+
+import { reduceHearts } from "@/actions/user-progress";
+import { upsertChallengeProgress } from "@/actions/challenge-progress";
+
+import { toast } from "sonner";
+
 import { QuestionBubble } from "./question-bubble";
 import { Challenge } from "./challenge";
 import { Header } from "./header";
 import { Footer } from "./footer";
-import { toast } from "sonner";
-import { reduceHearts } from "@/actions/user-progress";
-import { upsertChallengeProgress } from "@/actions/challenge-progress";
 
 type Props = {
   initialLessonId: number;
@@ -52,8 +56,7 @@ export const Quiz = ({
 
   const [selectedOption, setSelectedOption] = useState<number>();
   const [status, setStatus] = useState<
-    "correct" | "wrong" | "none" | "completed"
-  >("none");
+    "correct" | "wrong" | "none">("none");
 
   const challenge = challenges[activeIndex];
   const options = challenge?.challengeOptions ?? [];
@@ -71,14 +74,13 @@ export const Quiz = ({
   const onContinue = () => {
     if (!selectedOption) return;
 
-    if (status === "correct") {
-      onNext();
+    if (status === "wrong") {
       setStatus("none");
       setSelectedOption(undefined);
       return;
     }
 
-    if (status === "wrong") {
+    if (status === "correct") {
       onNext();
       setStatus("none");
       setSelectedOption(undefined);
@@ -159,7 +161,7 @@ export const Quiz = ({
                 options={options}
                 onSelect={onSelect}
                 status={status}
-                selectOption={selectedOption}
+                selectedOption={selectedOption}
                 disabled={pending}
                 type={challenge.type}
               />
