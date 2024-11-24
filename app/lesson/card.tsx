@@ -1,8 +1,10 @@
-import { challenges } from "@/db/schema";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { useCallback } from "react";
 import { useAudio, useKey } from "react-use";
+
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+
+import { challenges } from "@/db/schema";
 
 type Props = {
   id: number;

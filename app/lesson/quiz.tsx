@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from "react";
 import { useAudio } from "react-use";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
 import { challengeOptions, challenges } from "@/db/schema";
 
@@ -14,6 +16,7 @@ import { QuestionBubble } from "./question-bubble";
 import { Challenge } from "./challenge";
 import { Header } from "./header";
 import { Footer } from "./footer";
+import { ResultCard } from "./result-card";
 
 type Props = {
   initialLessonId: number;
@@ -33,6 +36,8 @@ export const Quiz = ({
   initialPercentage,
   userSubscription,
 }: Props) => {
+  const router = useRouter();
+
   const [correctAudio, _c, correctControls] = useAudio({
     src: "/correct.wav",
   });
@@ -42,6 +47,8 @@ export const Quiz = ({
   });
 
   const [pending, startTransition] = useTransition();
+
+  const [lessonId] = useState(initialLessonId)
 
   const [hearts, setHearts] = useState(initialHearts);
   const [percentage, setPercentage] = useState(initialPercentage);
@@ -55,8 +62,7 @@ export const Quiz = ({
   });
 
   const [selectedOption, setSelectedOption] = useState<number>();
-  const [status, setStatus] = useState<
-    "correct" | "wrong" | "none">("none");
+  const [status, setStatus] = useState<"correct" | "wrong" | "none">("none");
 
   const challenge = challenges[activeIndex];
   const options = challenge?.challengeOptions ?? [];
@@ -132,6 +138,41 @@ export const Quiz = ({
       });
     }
   };
+
+  if (!challenge) {
+    return (
+      <>
+        <div className="mx-auto flex h-full max-w-lg flex-col items-center justify-center gap-y-4 text-center lg:gap-y-8">
+          <Image
+            src="/finish.svg"
+            alt="Finish"
+            className="hidden lg:block"
+            height={100}
+            width={100}
+          />
+          <Image
+            src="/finish.svg"
+            alt="Finish"
+            className="hidden lg:hidden"
+            height={50}
+            width={50}
+          />
+          <h1 className="text-xl font-bold text-neutral-700 lg:text-3xl">
+            Great job! <br /> You&apos;ve completed the lesson!
+          </h1>
+          <div className="gap-x-5 flex w-full items-center">
+            <ResultCard variant="points" value={challenges.length * 10} />
+            <ResultCard variant="hearts" value={hearts} />
+          </div>
+        </div>
+        <Footer
+          lessonId={lessonId}
+          status="completed"
+          onCheck={() => {}}
+        />
+      </>
+    );
+  }
 
   const title =
     challenge.type === "ASSIST"
