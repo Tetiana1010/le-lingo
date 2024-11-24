@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useAudio } from "react-use";
+import { useAudio, useWindowSize } from "react-use";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import Confetti from "react-confetti"
 
 import { challengeOptions, challenges } from "@/db/schema";
 
@@ -36,7 +37,13 @@ export const Quiz = ({
   initialPercentage,
   userSubscription,
 }: Props) => {
+  const { width, height } = useWindowSize();
   const router = useRouter();
+
+  const [finishAudio ] = useAudio({
+    src: '/finish.mp3',
+    autoPlay: true
+  });
 
   const [correctAudio, _c, correctControls] = useAudio({
     src: "/correct.wav",
@@ -142,6 +149,14 @@ export const Quiz = ({
   if (!challenge) {
     return (
       <>
+        {finishAudio}
+        <Confetti
+          width={width}
+          height={height}
+          recycle={false}
+          numberOfPieces={500}
+          tweenDuration={1000}
+        />
         <div className="mx-auto flex h-full max-w-lg flex-col items-center justify-center gap-y-4 text-center lg:gap-y-8">
           <Image
             src="/finish.svg"
@@ -168,7 +183,7 @@ export const Quiz = ({
         <Footer
           lessonId={lessonId}
           status="completed"
-          onCheck={() => {}}
+          onCheck={() => router.push('/learn')}
         />
       </>
     );
