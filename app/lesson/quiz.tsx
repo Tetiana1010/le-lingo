@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useAudio, useWindowSize } from "react-use";
+import { useAudio, useWindowSize, useMount } from "react-use";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Confetti from "react-confetti"
+import Confetti from "react-confetti";
 
 import { challengeOptions, challenges } from "@/db/schema";
 
@@ -18,6 +18,9 @@ import { Challenge } from "./challenge";
 import { Header } from "./header";
 import { Footer } from "./footer";
 import { ResultCard } from "./result-card";
+
+import { useHeartsModal } from "@/store/use-hearts-modal";
+import { usePracticeModal } from "@/store/use-practice-modal";
 
 type Props = {
   initialLessonId: number;
@@ -37,12 +40,21 @@ export const Quiz = ({
   initialPercentage,
   userSubscription,
 }: Props) => {
+  const { open: openHeartsModal } = useHeartsModal();
+  const { open: openPracticeModal } = usePracticeModal();
+
+  useMount(() => {
+    if (initialPercentage === 100) {
+      openPracticeModal();
+    }
+  });
+
   const { width, height } = useWindowSize();
   const router = useRouter();
 
-  const [finishAudio ] = useAudio({
-    src: '/finish.mp3',
-    autoPlay: true
+  const [finishAudio] = useAudio({
+    src: "/finish.mp3",
+    autoPlay: true,
   });
 
   const [correctAudio, _c, correctControls] = useAudio({
@@ -55,10 +67,12 @@ export const Quiz = ({
 
   const [pending, startTransition] = useTransition();
 
-  const [lessonId] = useState(initialLessonId)
+  const [lessonId] = useState(initialLessonId);
 
   const [hearts, setHearts] = useState(initialHearts);
-  const [percentage, setPercentage] = useState(initialPercentage);
+  const [percentage, setPercentage] = useState(() => {
+    return initialPercentage === 100 ? 0 : initialPercentage
+  });
   const [challenges] = useState(initialLessonChallenges);
   const [activeIndex, setActiveIndex] = useState(() => {
     const uncompletedIndex = challenges.findIndex(
@@ -111,7 +125,7 @@ export const Quiz = ({
         upsertChallengeProgress(challenge.id)
           .then((response) => {
             if (response?.error === "heart") {
-              console.error("missing hearts");
+              openHeartsModal();
               return;
             }
 
@@ -130,7 +144,7 @@ export const Quiz = ({
         reduceHearts(challenge.id)
           .then((response) => {
             if (response?.error === "hearts") {
-              console.log("Missing hearts");
+              openHeartsModal();
               return;
             }
 
@@ -175,7 +189,7 @@ export const Quiz = ({
           <h1 className="text-xl font-bold text-neutral-700 lg:text-3xl">
             Great job! <br /> You&apos;ve completed the lesson!
           </h1>
-          <div className="gap-x-5 flex w-full items-center">
+          <div className="flex w-full items-center gap-x-5">
             <ResultCard variant="points" value={challenges.length * 10} />
             <ResultCard variant="hearts" value={hearts} />
           </div>
@@ -183,7 +197,7 @@ export const Quiz = ({
         <Footer
           lessonId={lessonId}
           status="completed"
-          onCheck={() => router.push('/learn')}
+          onCheck={() => router.push("/learn")}
         />
       </>
     );
