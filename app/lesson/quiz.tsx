@@ -71,7 +71,7 @@ export const Quiz = ({
 
   const [hearts, setHearts] = useState(initialHearts);
   const [percentage, setPercentage] = useState(() => {
-    return initialPercentage === 100 ? 0 : initialPercentage
+    return initialPercentage === 100 ? 0 : initialPercentage;
   });
   const [challenges] = useState(initialLessonChallenges);
   const [activeIndex, setActiveIndex] = useState(() => {
