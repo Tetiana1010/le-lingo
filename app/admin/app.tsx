@@ -3,7 +3,7 @@
 import { Admin, ListGuesser, Resource } from "react-admin";
 import simpleRestProvider from "ra-data-simple-rest";
 
-const dataProvider = simpleRestProvider('/api');
+const dataProvider = simpleRestProvider("/api");
 
 const AdminApp = () => {
   return (
@@ -18,4 +18,3 @@ const AdminApp = () => {
 };
 
 export default AdminApp;
-

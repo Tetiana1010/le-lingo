@@ -6,7 +6,7 @@ import {
   serial,
   text,
   boolean,
-  timestamp
+  timestamp,
 } from "drizzle-orm/pg-core";
 
 export const courses = pgTable("courses", {
@@ -140,8 +140,8 @@ export const userSubscription = pgTable("user_subscription", {
   stripeCustomerId: text("stripe_customer_id").notNull().unique(),
   stripeSubscriptionId: text("stripe_price_id").notNull(),
   stripePriceId: text("stripe_price_id").notNull(),
-  stripeCurrenyPeriodEnd: timestamp("stripe_current_perio_end").notNull()
-})
+  stripeCurrenyPeriodEnd: timestamp("stripe_current_perio_end").notNull(),
+});
 
 const schema = {
   courses,
