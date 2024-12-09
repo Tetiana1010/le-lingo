@@ -32,7 +32,7 @@ const AdminApp = () => {
         recordRepresentation="title"
       />
       <Resource
-        name="units"
+        name="lessons"
         list={LessonList}
         create={LessonCreate}
         edit={LessonEdit}

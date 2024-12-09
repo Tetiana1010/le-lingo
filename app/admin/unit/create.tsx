@@ -13,12 +13,12 @@ export const UnitCreate = () => {
       <SimpleForm>
         <TextInput source="title" validate={[required()]} label="Title" />
         <TextInput
-          source="descriprion"
+          source="description"
           validate={[required()]}
-          label="Descriprion"
+          label="description"
         />
         <ReferenceInput source="courseId" reference="courses" />
-        <NumberInput source="order" validate={[required()]} label="order" />
+        <NumberInput source="order" validate={[required()]} label="Order" />
       </SimpleForm>
     </Create>
   );

@@ -4,6 +4,7 @@ import {
   TextInput,
   required,
   NumberInput,
+  ReferenceInput,
 } from "react-admin";
 
 export const LessonCreate = () => {
@@ -11,12 +12,11 @@ export const LessonCreate = () => {
     <Create>
       <SimpleForm>
         <TextInput source="title" validate={[required()]} label="Title" />
-        <TextInput
+        <ReferenceInput
           source="unitId"
-          validate={[required()]}
-          label="units"
+          reference="units"
         />
-        <NumberInput source="order" validate={[required()]} label="order" />
+        <NumberInput source="order" validate={[required()]} label="Order" />
       </SimpleForm>
     </Create>
   );

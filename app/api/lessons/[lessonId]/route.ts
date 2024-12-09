@@ -24,7 +24,7 @@ export const PUT = async (
   { params }: { params: { lessonId: number } },
 ) => {
   if (!isAdmin()) {
-    return new NextResponse("Unauthoriyed", { status: 403 });
+    return new NextResponse("Unauthorized", { status: 403 });
   }
 
   const body = await req.json();

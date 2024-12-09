@@ -27,6 +27,8 @@ export const PUT = async (
     return new NextResponse("Unauthoriyed", { status: 403 });
   }
 
+  console.log(req.body)
+
   const body = await req.json();
   const data = await db
     .update(units)

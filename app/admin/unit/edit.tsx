@@ -14,9 +14,9 @@ export const UnitEdit = () => {
         <NumberInput source="id" validate={[required()]} label="Id" />
         <TextInput source="title" validate={[required()]} label="Title" />
         <TextInput
-          source="descriprion"
+          source="description"
           validate={[required()]}
-          label="Descriprion"
+          label="Description"
         />
         <ReferenceInput source="courseId" reference="courses" />
         <NumberInput source="order" validate={[required()]} label="order" />
